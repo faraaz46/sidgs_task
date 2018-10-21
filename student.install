@@ -1,0 +1,49 @@
+<?php
+
+function student_schema(){
+$schema=array();
+$schema['student']=array(
+'description'=>'A student table.',
+
+/* field in the table*/
+'fields'=>array(
+'st_id'=>array(
+'description'=>'the student ID',
+'type'=>'serial', /* will generate automatically*/
+'unsigned'=>True,
+'not null'=>True, /* not null means we cannot leave the field empty*/
+),
+
+/*first name field*/
+'st_fnm'=>array(
+'discription'=>'A fields for student first name',
+'type'=>'varchar', /* variable and character both*/
+'length'=>30,
+'not null'=>True,
+'default'=>'',
+),
+
+/*Last name field*/
+'st_lnm'=>array(
+'discription'=>'A fields for student last name',
+'type'=>'varchar', /* variable and character both*/
+'length'=>20,
+'not null'=>True,
+'default'=>'',
+),
+
+/*student email*/
+'st_email'=>array(
+'discription'=>'A fields for student email',
+'type'=>'varchar', /* variable and character both*/
+'length'=>25,
+'not null'=>True,
+'default'=>'',
+),
+),
+'primary key'=>array('st_id'), /*primary key is unique key - it means student id cannot be same*/
+);
+return $schema; /*it is returning the function*/
+}
+
+?>

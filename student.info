@@ -1,0 +1,5 @@
+name = student
+description = Export the members who have loged in with first and last name.
+core = 7.x
+
+
