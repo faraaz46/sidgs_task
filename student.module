@@ -6,6 +6,14 @@ function student_permission(){
       'title'=>t('submit student'),
       'description'=>t('submit the form'),
     ),
+    'access student list'=>array(
+      'title'=>t('access the student list'),
+      'discription'=>t('access the student list'),
+    ),
+    'access delete'=>array(
+      'title'=>t('access the delete page'),
+      'description'=>t('acess the delete page'),
+    ),
   );
 }
 
@@ -13,12 +21,29 @@ function student_permission(){
 function student_menu(){
 $items=array();
 $items['student']=array(
-'title'=>'student information form',
+'title'=>'Student Information Form',
 'type'=>MENU_NORMAL_ITEM,
 'access arguments'=>array('submit student'),
 'page callback'=>'drupal_get_form',
 'page arguments'=>array('student_form'),
 'access callback'=>True,
+);
+/* creating student list page */
+$items['formlist']=array(
+  'title'=>'my form list',
+  'type'=>MENU_NORMAL_ITEM,
+  'access arguments'=>array('access form list'),
+  'page callback'=>'student_list',
+  'access callback'=>TRUE,
+);
+/* CREATING DELETE PAGE */
+$items['formlist/%/delete']=array(
+  'title'=>'My Form List',
+  'type'=>MENU_NORMAL_ITEM,
+  'access arguments'=>array('access student_form_delete'),
+  'page callback'=>'student_form_delete',
+  'page argument'=>array(3),
+  'access callback'=>TRUE,
 );
 return $items;
 }
@@ -46,7 +71,7 @@ function student_form($form,&$form_state){
         );
         $form['submit']=array(
           '#type'=>'submit',
-          '#value'=>t('Add Student'),
+          '#value'=>t('Check In'),
         );
         return $form;
 }
@@ -62,4 +87,41 @@ function student_form_submit($form,&$form_state){
   ))
   ->execute();
   drupal_set_message(t('Entry has been added.'));
+}
+
+/*Display the Database in the new page*/
+function student_list(){
+
+  $results = db_query("SELECT * FROM {student}");
+  $header = array(t('ID'),t('First Name'),t('Last Name'),t('E-mail'),t('delete'));
+  $rows=array(); /*values pulling database*/
+
+  foreach($results AS $result){
+    $rows[]=array(
+      check_plain($result->st_id),
+      check_plain($result->st_fnm),
+      check_plain($result->st_lnm),
+      check_plain($result->st_email),
+
+      t('<a href="formlist/'.$result->st_id.'/delete">Delete</a>'),
+    //  t('<a href="formlist/'.$reslut->st_id.'/edit">Edit</a>'),
+    );
+  }
+  return theme('table',array('header'=>$header,'rows'=>$rows));
+}
+
+function student_form_delete(){
+  $ID=arg(1);
+  $num_deleted = db_delete('student')
+  ->condition('st_id',$ID)
+   ->execute();
+   if($num_deleted){
+     drupal_set_message(t('entry has been deleted.'));
+     drupal_goto("formlist");
+   }
+else {
+  // code...
+  drupal_set_message(t('error in query'));
+}
+
 }
