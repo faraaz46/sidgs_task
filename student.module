@@ -17,33 +17,6 @@ function student_permission(){
   );
 }
 
-function student_block_info() {
-    $blocks = array();
-    // Generate listing of blocks from this module, for the admin/block page
-    $blocks['student_info'] = array(
-        'info' => t('Student information Block'),
-        'title' => t('Student information Block to show current user information')
-    );
-
- return $blocks;
-}
-/**
- * Implementation of block
- */
-function student_block_view($delta) {
-   $block = array();
-   switch ($delta) {
-       case "student_info":
-           global $user;
-           $user_data = user_load($user->uid);
-           $user->name;
-           $test = "<h2> First name is :".$user_data->field_first_name['und'][0]['value']." </h2></br>"
-                   . "<h2> Last name is :".$user_data->field_last_name['und'][0]['value']." </h2></br>";
-            $block['content'] =  $test;
-           break;
-   }
-    return $block;
-}
 function student_menu(){
 $items=array();
 $items['student']=array(
@@ -111,7 +84,6 @@ function student_form($form,&$form_state){
         return $form;
 }
 
-
 /* submit handle for form */
 function student_form_submit($form,&$form_state){
   $st_id=db_insert('student')
@@ -119,7 +91,6 @@ function student_form_submit($form,&$form_state){
     'st_fnm'=>$form_state['values']['st_fnm'],
     'st_lnm'=>$form_state['values']['st_lnm'],
     'st_email'=>$form_state['values']['st_email'],
-    //'st_address'=>$form_state['values']['st_address'],
   ))
   ->execute();
   drupal_set_message(t('Entry has been added.'));
@@ -127,7 +98,6 @@ function student_form_submit($form,&$form_state){
 
 /*Display the Database in the new page*/
 function student_list(){
-  //$results = db_query("SELECT * FROM {student}");
   $query=db_select('student','st');
   $query
   ->fields('st',array('st_id','st_fnm','st_lnm','st_email'))
@@ -144,8 +114,6 @@ function student_list(){
       check_plain($result->st_lnm),
       check_plain($result->st_email),
 
-    //  t('<a href="formlist/'.$result->st_id.'/delete">Delete</a>'),
-    // t('<a href="formlist/'.$result->st_id.'/edit">Edit</a>'),
     l('Delete', 'formlist/'.$result->st_id.'/delete'),
         l('Edit', 'formlist/'.$result->st_id.'/edit'),
     );
