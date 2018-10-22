@@ -24,11 +24,11 @@ function student_block_info() {
         'info' => t('Student information Block'),
         'title' => t('Student information Block to show current user information')
     );
-    
+
  return $blocks;
 }
 /**
- * Implementation of block 
+ * Implementation of block
  */
 function student_block_view($delta) {
    $block = array();
@@ -143,10 +143,11 @@ function student_list(){
       check_plain($result->st_fnm),
       check_plain($result->st_lnm),
       check_plain($result->st_email),
-      //check_plain($result->st_address),
 
-      t('<a href="formlist/'.$result->st_id.'/delete">Delete</a>'),
-     t('<a href="formlist/'.$result->st_id.'/edit">Edit</a>'),
+    //  t('<a href="formlist/'.$result->st_id.'/delete">Delete</a>'),
+    // t('<a href="formlist/'.$result->st_id.'/edit">Edit</a>'),
+    l('Delete', 'formlist/'.$result->st_id.'/delete'),
+        l('Edit', 'formlist/'.$result->st_id.'/edit'),
     );
   }
   return theme('table',array('header'=>$header,'rows'=>$rows));
@@ -166,8 +167,6 @@ else {
 }
 
 }
-
-
 /**
  * Implementation of Form Edit page
  */
@@ -180,21 +179,21 @@ function student_edit_form(){
 
     $form['st_fnm']=array(
       '#type'=>'textfield',
-      '#title'=>t('Enter Student Name:'),
+      '#title'=>t('Enter First Name:'),
       '#size'=>50,
       '#required'=>TRUE,
       '#value'=>t($record->st_fnm),
     );
     $form['st_lnm']=array(
       '#type'=>'textfield',
-      '#title'=>t('Enter Student marks:'),
+      '#title'=>t('Enter Last Name:'),
       '#size'=>30,
       '#required'=>TRUE,
       '#value'=>t($record->st_lnm),
     );
     $form['st_email']=array(
       '#type'=>'textfield',
-      '#title'=>t('Enter Student marks:'),
+      '#title'=>t('Enter E-mail:'),
       '#size'=>30,
       '#required'=>TRUE,
       '#value'=>t($record->st_email),
@@ -218,8 +217,9 @@ function student_edit_form_submit($form, &$form_state) {
   ))
    ->condition('st_id',$ID, '=')
   ->execute();
-  drupal_set_message(t('Entry has been added.'));
+  drupal_set_message(t('Entry has been Updated.'));
+
 }
- 
- 
+
+
 ?>
