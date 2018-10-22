@@ -41,6 +41,7 @@ $schema['student']=array(
 'default'=>'',
 ),
 ),
+
 'primary key'=>array('st_id'), /*primary key is unique key - it means student id cannot be same*/
 );
 return $schema; /*it is returning the function*/

@@ -17,7 +17,33 @@ function student_permission(){
   );
 }
 
-
+function student_block_info() {
+    $blocks = array();
+    // Generate listing of blocks from this module, for the admin/block page
+    $blocks['student_info'] = array(
+        'info' => t('Student information Block'),
+        'title' => t('Student information Block to show current user information')
+    );
+    
+ return $blocks;
+}
+/**
+ * Implementation of block 
+ */
+function student_block_view($delta) {
+   $block = array();
+   switch ($delta) {
+       case "student_info":
+           global $user;
+           $user_data = user_load($user->uid);
+           $user->name;
+           $test = "<h2> First name is :".$user_data->field_first_name['und'][0]['value']." </h2></br>"
+                   . "<h2> Last name is :".$user_data->field_last_name['und'][0]['value']." </h2></br>";
+            $block['content'] =  $test;
+           break;
+   }
+    return $block;
+}
 function student_menu(){
 $items=array();
 $items['student']=array(
@@ -30,7 +56,7 @@ $items['student']=array(
 );
 /* creating student list page */
 $items['formlist']=array(
-  'title'=>'my form list',
+  'title'=>'My Form List',
   'type'=>MENU_NORMAL_ITEM,
   'access arguments'=>array('access form list'),
   'page callback'=>'student_list',
@@ -45,6 +71,15 @@ $items['formlist/%/delete']=array(
   'page argument'=>array(3),
   'access callback'=>TRUE,
 );
+$items['formlist/%/edit']=array(
+    'title'=>'Student Edit List',
+    'type'=>MENU_NORMAL_ITEM,
+    'page callback' => 'drupal_get_form',
+    'access arguments'=>array('access student_form_edit'),
+    'page arguments' => array('student_edit_form'),
+    'page argument'=>array(1),
+    'access callback'=>TRUE,
+  );
 return $items;
 }
 
@@ -84,6 +119,7 @@ function student_form_submit($form,&$form_state){
     'st_fnm'=>$form_state['values']['st_fnm'],
     'st_lnm'=>$form_state['values']['st_lnm'],
     'st_email'=>$form_state['values']['st_email'],
+    //'st_address'=>$form_state['values']['st_address'],
   ))
   ->execute();
   drupal_set_message(t('Entry has been added.'));
@@ -91,9 +127,14 @@ function student_form_submit($form,&$form_state){
 
 /*Display the Database in the new page*/
 function student_list(){
-
-  $results = db_query("SELECT * FROM {student}");
-  $header = array(t('ID'),t('First Name'),t('Last Name'),t('E-mail'),t('delete'));
+  //$results = db_query("SELECT * FROM {student}");
+  $query=db_select('student','st');
+  $query
+  ->fields('st',array('st_id','st_fnm','st_lnm','st_email'))
+  ->range(0,50)
+  ->orderby('st.st_id');
+  $results=$query->execute();
+  $header = array(t('ID'),t('First Name'),t('Last Name'),t('E-mail'),t('delete'),t('edit'));
   $rows=array(); /*values pulling database*/
 
   foreach($results AS $result){
@@ -102,14 +143,14 @@ function student_list(){
       check_plain($result->st_fnm),
       check_plain($result->st_lnm),
       check_plain($result->st_email),
+      //check_plain($result->st_address),
 
       t('<a href="formlist/'.$result->st_id.'/delete">Delete</a>'),
-    //  t('<a href="formlist/'.$reslut->st_id.'/edit">Edit</a>'),
+     t('<a href="formlist/'.$result->st_id.'/edit">Edit</a>'),
     );
   }
   return theme('table',array('header'=>$header,'rows'=>$rows));
 }
-
 function student_form_delete(){
   $ID=arg(1);
   $num_deleted = db_delete('student')
@@ -125,3 +166,60 @@ else {
 }
 
 }
+
+
+/**
+ * Implementation of Form Edit page
+ */
+function student_edit_form(){
+      $form = array();
+       $ID=arg(1);
+
+    $result=db_query('SELECT * FROM {student} WHERE st_id='.$ID);
+    $record=$result->fetchObject();
+
+    $form['st_fnm']=array(
+      '#type'=>'textfield',
+      '#title'=>t('Enter Student Name:'),
+      '#size'=>50,
+      '#required'=>TRUE,
+      '#value'=>t($record->st_fnm),
+    );
+    $form['st_lnm']=array(
+      '#type'=>'textfield',
+      '#title'=>t('Enter Student marks:'),
+      '#size'=>30,
+      '#required'=>TRUE,
+      '#value'=>t($record->st_lnm),
+    );
+    $form['st_email']=array(
+      '#type'=>'textfield',
+      '#title'=>t('Enter Student marks:'),
+      '#size'=>30,
+      '#required'=>TRUE,
+      '#value'=>t($record->st_email),
+    );
+    $form['submit']=array(
+      '#type'=>'submit',
+      '#value'=>t('Save'),
+    );
+     return $form;
+}
+/**
+ * Submit handler for edit form
+ */
+function student_edit_form_submit($form, &$form_state) {
+   $ID=arg(1);
+   $st_id=db_update('student')
+  ->fields(array(
+    'st_fnm'=>$form_state['input']['st_fnm'],
+    'st_lnm'=>$form_state['input']['st_lnm'],
+    'st_email'=>$form_state['input']['st_email'],
+  ))
+   ->condition('st_id',$ID, '=')
+  ->execute();
+  drupal_set_message(t('Entry has been added.'));
+}
+ 
+ 
+?>
