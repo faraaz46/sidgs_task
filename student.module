@@ -19,7 +19,6 @@ function student_permission(){
 
 function student_block_info() {
     $blocks = array();
-    // Generate listing of blocks from this module, for the admin/block page
     $blocks['student_info'] = array(
         'info' => t('User Loged in Information block'),
         'title' => t('User Loged In Information'),
@@ -43,7 +42,6 @@ function student_block_view($delta) {
    }
     return $block;
 }
-
 
 function student_menu(){
 $items=array();
@@ -83,7 +81,6 @@ $items['formlist/%/edit']=array(
   );
 return $items;
 }
-
 /* form*/
 function student_form($form,&$form_state){
 
@@ -161,7 +158,6 @@ else {
   // code...
   drupal_set_message(t('error in query'));
 }
-
 }
 /**
  * Implementation of Form Edit page
@@ -169,7 +165,6 @@ else {
 function student_edit_form(){
       $form = array();
        $ID=arg(1);
-
     $result=db_query('SELECT * FROM {student} WHERE st_id='.$ID);
     $record=$result->fetchObject();
 
