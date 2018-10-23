@@ -17,6 +17,34 @@ function student_permission(){
   );
 }
 
+function student_block_info() {
+    $blocks = array();
+    // Generate listing of blocks from this module, for the admin/block page
+    $blocks['student_info'] = array(
+        'info' => t('User Loged in Information block'),
+        'title' => t('User Loged In Information'),
+    );
+ return $blocks;
+}
+/**
+ * Implementation of block
+ */
+function student_block_view($delta) {
+   $block = array();
+   switch ($delta) {
+       case "student_info":
+           global $user;
+           $user_data = user_load($user->uid);
+           $user->name;
+           $test = "<h2> First name is :".$user_data->field_first_name['und'][0]['value']." </h2></br>"
+                   . "<h2> Last name is :".$user_data->field_last_name['und'][0]['value']." </h2></br>";
+            $block['content'] =  $test;
+           break;
+   }
+    return $block;
+}
+
+
 function student_menu(){
 $items=array();
 $items['student']=array(
