@@ -1,50 +1,43 @@
 <?php
 
-function student_schema(){
-$schema = array();
-$schema['student'] = array(
-'description' => 'A student table.',
+/**
+ * Hook_schema.
+ */
+function student_schema() {
 
-/* field in the table*/
-'fields' => array(
-'st_id' => array(
-'description' => 'the student ID',
-'type' => 'serial', /* will generate automatically*/
-'unsigned' => True,
-'not null' => True, /* not null means we cannot leave the field empty*/
-),
-
-/*first name field*/
-'st_fnm' => array(
-'discription' => 'A fields for student first name',
-'type' => 'varchar', /* variable and character both*/
-'length' => 30,
-'not null' => True,
-'default' => '',
-),
-
-/*Last name field*/
-'st_lnm' => array(
-'discription' => 'A fields for student last name',
-'type' => 'varchar', /* variable and character both*/
-'length' => 20,
-'not null' => True,
-'default' => '',
-),
-
-/*student email*/
-'st_email' => array(
-'discription' => 'A fields for student email',
-'type' => 'varchar', /* variable and character both*/
-'length' => 25,
-'not null' => True,
-'default' => '',
-),
-),
-
-'primary key' => array('st_id'), /*primary key is unique key - it means student id cannot be same*/
-);
-return $schema; /*it is returning the function*/
+  $schema = [];
+  $schema['student'] = [
+    'description' => 'A student table.',
+    'fields' => [/* Field in the table */
+      'st_id' => [
+        'description' => 'the student ID',
+        'type' => 'serial', /* will generate automatically */
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'st_fnm' => [
+        'description' => 'A fields for student first name',
+        'type' => 'varchar',
+        'length' => 30,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'st_lnm' => [
+        'description' => 'A fields for student last name',
+        'type' => 'varchar',
+        'length' => 30,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'st_email' => [
+        'description' => 'A fields Email',
+        'type' => 'varchar',
+        'length' => 30,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+    ],
+    'primary key' => ['st_id'],
+  ];
+  return $schema;
 }
-
-?>

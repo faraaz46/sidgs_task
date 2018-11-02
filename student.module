@@ -3,8 +3,7 @@
 /**
  * Implements hook_permission().
  */
-function student_permission()
-{
+function student_permission() {
   return array(
     'submit student' => array(
       'title' => t('submit student'),
@@ -12,11 +11,11 @@ function student_permission()
     ),
     'access student list' => array(
       'title' => t('access the student list'),
-      'discription' => t('access the student list'),
+      'description' => t('access the student list'),
     ),
     'access delete' => array(
       'title' => t('access the delete page'),
-      'description' => t('acess the delete page'),
+      'description' => t('access the delete page'),
     ),
   );
 }
@@ -24,15 +23,13 @@ function student_permission()
 /**
  * Implements hook_block_info().
  */
-function student_block_info()
-{
+function student_block_info() {
   $blocks = array();
-  // Generate listing of blocks from this module, for the admin/block page
+  // Generate listing of blocks from this module, for the admin/block page.
   $blocks['student_info'] = array(
     'info' => t('Student information Block'),
-    'title' => t('Student information Block to show current  user information')
+    'title' => t('Student information Block to show current  user information'),
   );
-
   return $blocks;
 }
 
@@ -41,8 +38,7 @@ function student_block_info()
  *
  * Generates the administrator-defined blocks for display.
  */
-function student_block_view($delta)
-{
+function student_block_view($delta) {
   $block = array();
   switch ($delta) {
     case "student_info":
@@ -63,8 +59,7 @@ function student_block_view($delta)
 /**
  * Implements hook_menu().
  */
-function student_menu()
-{
+function student_menu() {
   $items = array();
   $items['student'] = array(
     'title' => 'Student Information Form',
@@ -72,7 +67,7 @@ function student_menu()
     'access arguments' => array('submit student'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('student_form'),
-    'access callback' => True,
+    'access callback' => TRUE,
     'file' => 'student.admin.inc',
   );
   /* creating student list page */
@@ -106,6 +101,3 @@ function student_menu()
   );
   return $items;
 }
-
-
-?>
